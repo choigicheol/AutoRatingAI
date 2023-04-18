@@ -1,0 +1,12 @@
+@font-face {
+  font-family: BMJUA;
+  src: url('./assets/fonts/BMJUA.woff2');
+  /* src: url('./assets/fonts/BMJUA.ttf'); */
+  font-display: block;
+  
+}
+
+body {
+  font-family: "BMJUA", "sans-serif";
+  margin: 0;
+}
