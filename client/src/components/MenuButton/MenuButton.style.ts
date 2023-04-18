@@ -6,7 +6,10 @@ export const Container = styled.div`
   align-items: center;
   flex-direction: column;
   overflow: hidden;
+<<<<<<< HEAD
   cursor: pointer;
+=======
+>>>>>>> develop
 `;
 
 export const MenuImage = styled.img`

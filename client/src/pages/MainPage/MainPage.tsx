@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import MenuButton from "../../components/MenuButton/MenuButton";
 import StoreCard from "../../components/StoreCard/StoreCard";
+<<<<<<< HEAD
+=======
+import { storeDummy } from "../../dummy/dummy";
+>>>>>>> develop
 import Header from "../../components/Header/Header";
 import {
   Container,
@@ -12,16 +16,23 @@ import ReviewCard from "../../components/ReviewCard/ReviewCard";
 import Footer from "../../components/Footer/Footer";
 import ReviewModal from "../../components/ReviewModal/ReviewModal";
 import DetailInfo from "../../components/DetailInfo/DetailInfo";
+<<<<<<< HEAD
 import axios from "axios";
 
 interface MenuCategory {
   id: number;
   title: string;
   type: string;
+=======
+
+interface MenuCategory {
+  title: string;
+>>>>>>> develop
   path: string;
 }
 
 interface ReviewData {
+<<<<<<< HEAD
   id: number;
   comment: string;
   date: string;
@@ -39,10 +50,25 @@ interface StoreData {
   type: string;
   subName: string;
   reviews: ReviewData[];
+=======
+  name: string;
+  imagePath: string;
+  content: string;
+}
+
+interface StoreData {
+  name?: string;
+  imagePath?: string;
+  address?: string;
+  type?: string;
+  subType?: string;
+  reviews?: ReviewData[];
+>>>>>>> develop
 }
 
 function MainPage() {
   const [isSelectStore, setIsSelectStore] = useState(false);
+<<<<<<< HEAD
   const [selectStore, setSelectStore] = useState<StoreData | undefined>(
     undefined
   );
@@ -86,6 +112,22 @@ function MainPage() {
       .catch((error) => {
         console.error(error);
       });
+=======
+  const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const [store, setStore] = useState<StoreData>({});
+  const [showModal, setShowModal] = useState(false);
+
+  const menus: MenuCategory[] = [
+    { title: "한식", path: "./koreanFood.png" },
+    { title: "양식", path: "./pasta.png" },
+    { title: "일식", path: "./sushi.png" },
+    { title: "중식", path: "./noodle.png" },
+    { title: "분식", path: "./snack.png" },
+  ];
+
+  const handleButtonClick = () => {
+    setShowModal(true);
+>>>>>>> develop
   };
 
   const handleCloseModal = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -93,6 +135,7 @@ function MainPage() {
     setShowModal(false);
   };
 
+<<<<<<< HEAD
   const getStore = (id: string) => {
     axios
       .get(`http://localhost:5000/store/info?storeId=${id}`, {})
@@ -107,6 +150,16 @@ function MainPage() {
 
   const handleSelectStore = (e: React.MouseEvent<HTMLDivElement>) => {
     getStore(e.currentTarget.id);
+=======
+  const getReviews = (name: string) => {
+    for (let i = 0; i < storeDummy.length; i++) {
+      if (storeDummy[i].name === name) {
+        setReviews(storeDummy[i].reviews);
+        setStore(storeDummy[i]);
+      }
+    }
+    setIsSelectStore(true);
+>>>>>>> develop
   };
 
   return (
@@ -117,6 +170,7 @@ function MainPage() {
         <ListContainer backgroundColor={"#F5F5F5"}>
           <MenuNav>
             {menus.map((menu) => {
+<<<<<<< HEAD
               const { id, type, title, path } = menu;
               return (
                 <MenuButton
@@ -149,10 +203,30 @@ function MainPage() {
             ) : (
               <></>
             )}
+=======
+              const { title, path } = menu;
+              return <MenuButton title={title} path={path}></MenuButton>;
+            })}
+          </MenuNav>
+          <ContentsList>
+            {storeDummy.map((store) => {
+              const { name, address, imagePath, subType } = store;
+              return (
+                <StoreCard
+                  name={name}
+                  imagePath={imagePath}
+                  address={address}
+                  subType={subType}
+                  getReviews={getReviews}
+                />
+              );
+            })}
+>>>>>>> develop
           </ContentsList>
         </ListContainer>
         {/* review List */}
         <ListContainer backgroundColor={"#eeeeee"}>
+<<<<<<< HEAD
           {isSelectStore && selectStore ? (
             <>
               <DetailInfo
@@ -168,6 +242,23 @@ function MainPage() {
                       name={userName}
                       imagePath={imagePath}
                       content={comment}
+=======
+          {isSelectStore ? (
+            <>
+              <DetailInfo
+                name={store.name}
+                address={store.address}
+                handleButtonClick={handleButtonClick}
+              />
+              <ContentsList>
+                {reviews.map((review) => {
+                  const { name, imagePath, content } = review;
+                  return (
+                    <ReviewCard
+                      name={name}
+                      imagePath={imagePath}
+                      content={content}
+>>>>>>> develop
                     />
                   );
                 })}
