@@ -42,7 +42,7 @@ router.get("/info", async (req, res) => {
         exclude: ["createdAt", "updatedAt"],
       },
     });
-    store.dataValues.reviews = reviews;
+    store.dataValues.reviews = reviews.reverse();
     res.json(store);
   } catch (error) {
     console.error(error);
