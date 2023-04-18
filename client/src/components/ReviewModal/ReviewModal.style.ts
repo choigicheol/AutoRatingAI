@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CenterContainer } from "../../styles/commomStyles";
+import { CenterContainer } from "../../styles/commonStyles";
 
 interface ButtonProps {
   background?: string;
@@ -20,7 +20,7 @@ export const ReviewForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 30%;
+  width: 400px;
   background: #ffffff;
   border-radius: 10px;
   padding: 10px;
@@ -50,6 +50,7 @@ export const Textarea = styled.textarea`
   font-size: 16px;
   font-family: BMJUA;
   margin-bottom: 10px;
+  line-height: 1.3;
 `;
 
 export const Button = styled.button<ButtonProps>`
@@ -63,4 +64,26 @@ export const Button = styled.button<ButtonProps>`
   background: ${(props) => props.background || "#000000"};
   color: #ffffff;
   font-size: 14px;
+`;
+
+export const WriterInfo = styled.span`
+  font-size: 18px;
+  margin-right: 5px;
+  background: rgba(255, 99, 71, 0.6);
+  padding: 3px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  height: 30px;
+  color: #ffffff;
+`;
+
+export const WriterInput = styled.input`
+  font-size: 16px;
+  font-family: BMJUA;
+  padding-left: 5px;
+  width: 100%;
+  height: 30px;
+  border-radius: 3px;
+  border: 2px solid #eeeeee;
+  box-sizing: border-box;
 `;

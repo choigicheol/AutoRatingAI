@@ -1,23 +1,27 @@
 import styled from "styled-components";
 
+interface Props {
+  isMouseOver: boolean;
+}
+
 export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   overflow: hidden;
-<<<<<<< HEAD
   cursor: pointer;
-=======
->>>>>>> develop
+  padding: 5px;
+  height: 60px;
+  width: 45px;
 `;
 
-export const MenuImage = styled.img`
-  width: 40px;
-  height: 40px;
+export const MenuImage = styled.img<Props>`
+  width: ${(props: Props) => (props.isMouseOver ? "40px" : "30px")};
+  height: ${(props: Props) => (props.isMouseOver ? "40px" : "30px")};
 `;
 
-export const MenuTitle = styled.span`
+export const MenuTitle = styled.span<Props>`
   margin-top: 10px;
   font-weight: bold;
   font-size: 12px;

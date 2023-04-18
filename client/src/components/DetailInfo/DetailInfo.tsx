@@ -1,33 +1,32 @@
 import React from "react";
-import { Container, OpenModalButton } from "./DetailInfo.style";
+import {
+  Container,
+  OpenModalButton,
+  Title,
+  StoreName,
+  SubName,
+  Address,
+} from "./DetailInfo.style";
 
 interface Props {
   name: string | undefined;
   address: string | undefined;
-  handleButtonClick: () => void;
+  subName: string | undefined;
+  handleOpenReview: () => void;
 }
 
-function DetailInfo({ name, address, handleButtonClick }: Props) {
+function DetailInfo({ name, address, subName, handleOpenReview }: Props) {
   return (
     <Container>
-      <div
-        style={{
-          margin: "10px 0",
-          fontSize: "25px",
-          color: "tomato",
-        }}
-      >
-        {name}
-      </div>
-      <div
-        style={{
-          margin: "10px 0",
-          fontSize: "12px",
-        }}
-      >
+      <Title>
+        <StoreName>{name}</StoreName>
+        <SubName>{subName}</SubName>
+      </Title>
+      <Address>
+        <img src="./placeholder.png" alt="" />
         {address}
-      </div>
-      <OpenModalButton onClick={() => handleButtonClick()}>
+      </Address>
+      <OpenModalButton onClick={() => handleOpenReview()}>
         <span>{"리뷰 작성하기"}</span>
       </OpenModalButton>
     </Container>

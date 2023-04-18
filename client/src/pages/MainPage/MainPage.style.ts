@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CenterContainer, ColumnContainer } from "../../styles/commomStyles";
+import { CenterContainer, ColumnContainer } from "../../styles/commonStyles";
 
 interface ContainerBackgroundColor {
   backgroundColor: string;
@@ -26,16 +26,6 @@ export const ListContainer = styled(ColumnContainer)<ContainerBackgroundColor>`
   @media screen and (max-width: 37.5rem) {
     padding: 0 5px 0 5px;
   }
-`;
-
-export const MenuNav = styled.nav`
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px 0;
-  margin: 10px 0;
-  border-bottom: 1px dashed #6b6b6b;
 `;
 
 export const ContentsList = styled.article`

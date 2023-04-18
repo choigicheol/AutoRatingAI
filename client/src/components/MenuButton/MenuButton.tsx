@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, MenuImage, MenuTitle } from "./MenuButton.style";
 
 interface Props {
@@ -9,10 +9,15 @@ interface Props {
 }
 
 function MenuButton({ title, type, path, handleMenuButtonClick }: Props) {
+  const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
   return (
-    <Container onClick={() => handleMenuButtonClick(type)}>
-      <MenuImage src={path} />
-      <MenuTitle>{title}</MenuTitle>
+    <Container
+      onMouseOver={() => setIsMouseOver(true)}
+      onMouseLeave={() => setIsMouseOver(false)}
+      onClick={() => handleMenuButtonClick(type)}
+    >
+      <MenuImage src={path} isMouseOver={isMouseOver} />
+      <MenuTitle isMouseOver={isMouseOver}>{title}</MenuTitle>
     </Container>
   );
 }
