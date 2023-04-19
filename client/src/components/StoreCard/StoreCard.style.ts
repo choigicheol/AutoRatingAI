@@ -36,7 +36,19 @@ export const StoreName = styled.span`
   font-size: 18px;
   font-weight: bold;
   margin-right: 5px;
+  @media screen and (max-width: 37.5rem) {
+    font-size: 16px;
+  }
 `;
 export const StoreSubName = styled.span`
   color: #929292;
+  @media screen and (max-width: 37.5rem) {
+    font-size: 13px;
+  }
+`;
+
+export const AddressArea = styled.div`
+  @media screen and (max-width: 37.5rem) {
+    font-size: 13px;
+  }
 `;

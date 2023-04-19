@@ -5,6 +5,7 @@ import {
   StoreInfoContainer,
   StoreName,
   StoreSubName,
+  AddressArea,
 } from "./StoreCard.style";
 import { StoreData } from "../../interface/interface";
 
@@ -28,7 +29,7 @@ function StoreCard({ store, handleSelectStore }: Props) {
           <StoreName>{name}</StoreName>
           <StoreSubName>{`${subName}`}</StoreSubName>
         </div>
-        <div>{`주소 : ${address}`}</div>
+        <AddressArea>{`주소 : ${address}`}</AddressArea>
       </StoreInfoContainer>
     </Container>
   );
