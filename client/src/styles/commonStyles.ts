@@ -30,9 +30,12 @@ export const ShadowLine = styled.div`
   z-index: 1;
 `;
 
-export const BlankMessage = styled.div`
-  font-size: 20px;
-  padding-bottom: 5px;
-  border-radius: 3px;
-  border-bottom: 3px solid #2e2e2e;
+export const BlankMessage = styled(ColumnContainer)`
+  span {
+    font-size: 20px;
+    border-radius: 3px;
+    border-bottom: 3px solid #2e2e2e;
+    height: 100%;
+    padding-bottom: 5px;
+  }
 `;

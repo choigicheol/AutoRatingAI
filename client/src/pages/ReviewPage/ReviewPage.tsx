@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, ListContainer } from "../MainPage/MainPage.style";
+import { Container, ReviewListContainer } from "../MainPage/MainPage.style";
 
 function ReviewPage() {
   const click = () => {
@@ -7,7 +7,7 @@ function ReviewPage() {
   };
   return (
     <Container>
-      <ListContainer backgroundColor={"#eeeeee"}>
+      <ReviewListContainer>
         {/* {isSelectStore && selectStore ? (
           <ReviewList
             selectStore={selectStore}
@@ -36,7 +36,7 @@ function ReviewPage() {
         >
           {"매장을 선택 해 주세요"}
         </div>
-      </ListContainer>
+      </ReviewListContainer>
     </Container>
   );
 }

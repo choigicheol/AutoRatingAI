@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
-import { Container, ListContainer } from "./MainPage.style";
+import {
+  Container,
+  StoreListContainer,
+  ReviewListContainer,
+  BackButton,
+} from "./MainPage.style";
 import Footer from "../../components/Footer/Footer";
 import ReviewModal from "../../components/ReviewModal/ReviewModal";
 import axios from "axios";
@@ -17,6 +22,7 @@ function MainPage() {
   );
   const [showModal, setShowModal] = useState(false);
   const [stores, setStores] = useState<StoreData[] | undefined>(undefined);
+  const [isShowReview, setIsShowReview] = useState<boolean>(false);
 
   useEffect(() => {
     axios
@@ -58,6 +64,7 @@ function MainPage() {
 
   const handleSelectStore = (e: React.MouseEvent<HTMLDivElement>) => {
     getStore(e.currentTarget.id);
+    setIsShowReview(true);
   };
 
   const handleCloseModal = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -105,21 +112,32 @@ function MainPage() {
       <Header />
       <Container>
         {/* ---------------------------- store List ---------------------------- */}
-        <ListContainer backgroundColor={"#F5F5F5"}>
+        <StoreListContainer isShowReview={isShowReview}>
           <MenuNav handleMenuButtonClick={handleMenuButtonClick} />
           <StoreList stores={stores} handleSelectStore={handleSelectStore} />
-        </ListContainer>
+        </StoreListContainer>
         {/* ---------------------------- review List ---------------------------- */}
-        <ListContainer backgroundColor={"#eeeeee"}>
-          {isSelectStore && selectStore ? (
+        <ReviewListContainer isShowReview={isShowReview}>
+          <BackButton>
+            <div onClick={() => setIsShowReview(false)}>
+              <img
+                style={{ width: "30px", marginRight: "5px" }}
+                src="./left1.png"
+              />
+              {"뒤로"}
+            </div>
+          </BackButton>
+          {isSelectStore || isShowReview ? (
             <ReviewList
               selectStore={selectStore}
               handleOpenReview={handleOpenReview}
             />
           ) : (
-            <BlankMessage>{"매장을 선택 해 주세요"}</BlankMessage>
+            <BlankMessage>
+              <span>{"매장을 선택 해 주세요"}</span>
+            </BlankMessage>
           )}
-        </ListContainer>
+        </ReviewListContainer>
       </Container>
       <Footer />
       {showModal && (
