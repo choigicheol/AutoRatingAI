@@ -1,8 +1,13 @@
 import React from "react";
-import { ListContainer, ShadowLine } from "../../styles/commonStyles";
+import {
+  BlankMessage,
+  ListContainer,
+  ShadowLine,
+} from "../../styles/commonStyles";
 import DetailInfo from "../DetailInfo/DetailInfo";
 import ReviewCard from "../ReviewCard/ReviewCard";
 import { StoreData } from "../../interface/interface";
+import { FullCenterContainer } from "./ReviewList.style";
 
 interface Props {
   selectStore: StoreData | undefined;
@@ -22,9 +27,15 @@ function ReviewList({ selectStore, handleOpenReview }: Props) {
           />
           <ShadowLine />
           <ListContainer>
-            {selectStore.reviews.map((review) => {
-              return <ReviewCard key={review.id} review={review} />;
-            })}
+            {selectStore.reviews.length ? (
+              selectStore.reviews.map((review) => {
+                return <ReviewCard key={review.id} review={review} />;
+              })
+            ) : (
+              <FullCenterContainer>
+                <BlankMessage>{"작성 된 리뷰가 없습니다."}</BlankMessage>
+              </FullCenterContainer>
+            )}
           </ListContainer>
         </>
       ) : (

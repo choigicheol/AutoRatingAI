@@ -29,3 +29,10 @@ export const ShadowLine = styled.div`
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1;
 `;
+
+export const BlankMessage = styled.div`
+  font-size: 20px;
+  padding-bottom: 5px;
+  border-radius: 3px;
+  border-bottom: 3px solid #2e2e2e;
+`;

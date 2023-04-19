@@ -4,7 +4,7 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 260px;
+  /* height: 260px; */
   border-radius: 5px;
   /* overflow: hidden; */
   background: #ffffff;
@@ -23,11 +23,20 @@ export const StoreInfoContainer = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
-  height: 40px;
+  /* height: 40px; */
   justify-content: space-between;
   cursor: pointer;
 
   &:hover {
     background-color: rgba(255, 0, 0, 0.04);
   }
+`;
+
+export const StoreName = styled.span`
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 5px;
+`;
+export const StoreSubName = styled.span`
+  color: #929292;
 `;

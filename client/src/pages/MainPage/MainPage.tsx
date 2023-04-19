@@ -7,7 +7,8 @@ import axios from "axios";
 import MenuNav from "../../components/MenuNav/MenuNav";
 import StoreList from "../../components/StoreList/StoreList";
 import ReviewList from "../../components/ReviewList/ReviewList";
-import { StoreData } from "../../interface/interface";
+import { ReviewData, StoreData } from "../../interface/interface";
+import { BlankMessage } from "../../styles/commonStyles";
 
 function MainPage() {
   const [isSelectStore, setIsSelectStore] = useState(false);
@@ -64,6 +65,14 @@ function MainPage() {
     setShowModal(false);
   };
 
+  const updateReview = (data: ReviewData) => {
+    if (selectStore) {
+      const update: StoreData = { ...selectStore };
+      update.reviews?.unshift(data);
+      setSelectStore(update);
+    }
+  };
+
   const handleSendReview = (
     e: React.MouseEvent<HTMLButtonElement>,
     text: string,
@@ -82,7 +91,7 @@ function MainPage() {
         comment,
       })
       .then((response) => {
-        console.log(response);
+        updateReview(response.data);
         setShowModal(false);
       })
       .catch((error) => {
@@ -108,16 +117,7 @@ function MainPage() {
               handleOpenReview={handleOpenReview}
             />
           ) : (
-            <div
-              style={{
-                fontSize: "20px",
-                paddingBottom: "5px",
-                borderRadius: "3px",
-                borderBottom: "3px solid #2e2e2e",
-              }}
-            >
-              {"매장을 선택 해 주세요"}
-            </div>
+            <BlankMessage>{"매장을 선택 해 주세요"}</BlankMessage>
           )}
         </ListContainer>
       </Container>

@@ -14,16 +14,10 @@ function StoreList({ stores, handleSelectStore }: Props) {
     <ListContainer>
       {stores ? (
         stores.map((store) => {
-          const { id, name, address, imagePath, subName, type } = store;
           return (
             <StoreCard
-              key={id}
-              id={id}
-              name={name}
-              imagePath={imagePath}
-              address={address}
-              subName={subName}
-              type={type}
+              key={store.id}
+              store={store}
               handleSelectStore={handleSelectStore}
             />
           );

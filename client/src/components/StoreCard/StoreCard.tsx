@@ -1,24 +1,20 @@
 import React from "react";
-import { Container, StoreImg, StoreInfoContainer } from "./StoreCard.style";
+import {
+  Container,
+  StoreImg,
+  StoreInfoContainer,
+  StoreName,
+  StoreSubName,
+} from "./StoreCard.style";
+import { StoreData } from "../../interface/interface";
 
 interface Props {
-  id: string;
-  name: string | undefined;
-  imagePath: string | undefined;
-  address: string | undefined;
-  subName: string | undefined;
-  type: string | undefined;
+  store: StoreData;
   handleSelectStore: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-function StoreCard({
-  id,
-  name,
-  imagePath,
-  address,
-  subName,
-  handleSelectStore,
-}: Props) {
+function StoreCard({ store, handleSelectStore }: Props) {
+  const { id, name, subName, address, imagePath } = store;
   return (
     <Container>
       <StoreImg src={`http://localhost:5000/${imagePath}`} />
@@ -28,19 +24,11 @@ function StoreCard({
           handleSelectStore(e);
         }}
       >
-        <div>
-          <span
-            style={{
-              fontWeight: "bold",
-              fontSize: "16px",
-              marginRight: "5px",
-            }}
-          >
-            {name}
-          </span>
-          <span>{`(${subName})`}</span>
+        <div style={{ marginBottom: "10px" }}>
+          <StoreName>{name}</StoreName>
+          <StoreSubName>{`${subName}`}</StoreSubName>
         </div>
-        <div>{address}</div>
+        <div>{`주소 : ${address}`}</div>
       </StoreInfoContainer>
     </Container>
   );

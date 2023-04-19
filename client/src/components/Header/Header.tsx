@@ -4,7 +4,7 @@ import { HeaderContainer } from "./Header.style";
 function Header() {
   return (
     <HeaderContainer>
-      <span>{"GPT가 매겨주는 리뷰 평점"}</span>
+      <span>{"Auto Rating GPT"}</span>
     </HeaderContainer>
   );
 }
