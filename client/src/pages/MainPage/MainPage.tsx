@@ -20,7 +20,7 @@ function MainPage() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/store/menuType?type=korean`)
+      .get(`${process.env.REACT_APP_API_URL}/store/menuType?type=korean`)
       .then((response) => {
         setStores(response.data);
       })
@@ -31,7 +31,7 @@ function MainPage() {
 
   const handleMenuButtonClick = (type: string) => {
     axios
-      .get(`http://localhost:5000/store/menuType?type=${type}`)
+      .get(`${process.env.REACT_APP_API_URL}/store/menuType?type=${type}`)
       .then((response) => {
         setStores(response.data);
       })
@@ -46,7 +46,7 @@ function MainPage() {
 
   const getStore = (id: string) => {
     axios
-      .get(`http://localhost:5000/store/info?storeId=${id}`, {})
+      .get(`${process.env.REACT_APP_API_URL}/store/info?storeId=${id}`, {})
       .then((response) => {
         setSelectStore(response.data);
         setIsSelectStore(true);
@@ -85,7 +85,7 @@ function MainPage() {
     const comment = text;
 
     axios
-      .post("http://localhost:5000/review", {
+      .post(`${process.env.REACT_APP_API_URL}/review`, {
         storeId,
         userName,
         comment,

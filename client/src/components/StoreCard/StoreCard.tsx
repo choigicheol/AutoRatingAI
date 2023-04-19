@@ -17,7 +17,7 @@ function StoreCard({ store, handleSelectStore }: Props) {
   const { id, name, subName, address, imagePath } = store;
   return (
     <Container>
-      <StoreImg src={`http://localhost:5000/${imagePath}`} />
+      <StoreImg src={`${process.env.REACT_APP_API_URL}/${imagePath}`} />
       <StoreInfoContainer
         id={id}
         onClick={(e: React.MouseEvent<HTMLDivElement>) => {
