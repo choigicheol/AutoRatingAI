@@ -1,19 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { Review } = require("../models");
-const OpenAI = require("openai");
-const { Configuration, OpenAIApi } = OpenAI;
+const axios = require("axios");
 require("dotenv").config();
-
-const configuration = new Configuration({
-  organization: "org-N5YhVJchrFKSEZu1kn1CQPsu",
-  apiKey: process.env.API_KEY,
-});
-
-const question =
-  "너는 미식가야 내가 처음 말해주는 음식점 리뷰를 보고 너가 썼다고 생각하고 너라면 1점부터 5점까지 중에 몇점을 줬을지 'n점' '이유는 ~입니다' 이라는 형식으로만 말해줘 자 새로운 리뷰 말해줄게";
-
-const openai = new OpenAIApi(configuration);
 
 function getDate() {
   const today = new Date();
@@ -23,26 +12,49 @@ function getDate() {
   return `${year}.${month}.${day}`;
 }
 
+const question =
+  "너가 한 음식점을 방문한 소비자라고 생각하고 다음에 알려주는 리뷰에 대해 너라면 1점이상 5점이하의 점수중에 몇점을 내렸을지 궁금해 형식은 점수:n점, 이유:~입니다 라고 말해줘 리뷰는";
+
+// 음슴체 변환하기 (추가예정)
+const transfer = { 임: "입니다", 음: "어", 슴: "습니다" };
+
+const getTransMessage = (message) => {
+  const textArr = message.split(" ");
+  return textArr
+    .map((word) => {
+      const lastWord = word.charAt(word.length - 1);
+      if (transfer[lastWord]) {
+        return word.replace(lastWord, transfer[lastWord]);
+      } else return word;
+    })
+    .join(" ");
+};
+
 // Review POST 요청 처리
 router.post("/", async (req, res) => {
   try {
     const { storeId, userName, comment } = req.body;
     const date = getDate();
-    console.log("before openAI");
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: question + comment,
-      max_tokens: 2048,
-      temperature: 0.7,
-    });
-    console.log("After openAI");
+
+    const transMessage = getTransMessage(comment);
+
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: question + transMessage }],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.API_KEY}`,
+        },
+      }
+    );
     if (response.data) {
       if (response.data.choices) {
-        const ratingString = response.data.choices[0].text;
-        console.log(ratingString);
+        const ratingString = response.data.choices[0].message.content;
         const rating = Number(ratingString.match(/\d/)[0]);
-        console.log(storeId, userName, comment, rating, date);
-        // Review 모델을 사용하여 review 생성
         const review = await Review.create({
           storeId,
           userName,
@@ -54,8 +66,11 @@ router.post("/", async (req, res) => {
       }
     }
   } catch (error) {
-    res.status(500).json({ error: "Error creating review" });
+    console.error(error);
   }
+
+  // console.log(storeId, userName, comment, rating, date);
+  // Review 모델을 사용하여 review 생성
 });
 
 router.get("/", async (req, res) => {
