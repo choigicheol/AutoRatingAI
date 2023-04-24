@@ -12,11 +12,8 @@ function getDate() {
   return `${year}.${month}.${day}`;
 }
 
-const question =
-  "너는 이제부터 음식점 소비자야 너는 가게에 다음과같은 리뷰를 남겼어 점수는 1점이상 5점이하중에 몇점을 줬을까? 점수 : n점, 이유: ~입니다 라고 대답해봐 리뷰 말해줄게 ";
-
 // 음슴체 변환하기 (추가예정)
-const transfer = { 임: "입니다", 음: "어", 슴: "습니다" };
+const transfer = { 임: "입니다", 음: "어", 슴: "습니다", 남: "납니다" };
 
 const getTransMessage = (message) => {
   const textArr = message.split(" ");
@@ -38,6 +35,9 @@ router.post("/", async (req, res) => {
 
     const transMessage = getTransMessage(comment);
 
+    // const question = `너는 음식점 소비자야 너는 가게에 다음과같은 리뷰를 남겼어 ${transMessage} 이 리뷰의 의미를 모르겠으면 점수없이 모르겠습니다 라고만 말해 의미를 알겠으면 - 점수는 1점이상 5점이하중에 몇점을 줬을까? 점수 : 몇점, 이유: ~입니다 라고 대답해봐`;
+    // const question = `음식점 리뷰 : ${transMessage}. 방금 말한 음식점 리뷰 문장에서 긍정적, 부정적 요소를 파악하고 별점형식으로 1점이상 5점이하 중에 하나만 골라줘. 의미를 모르겠으면 모르겠습니다 라고 말해. `;
+    const question = `자, "${transMessage}" 해당 문장에서 긍정적, 부정적 요소를 파악하고 별점형식으로 1점이상 5점이하 중에 하나만 골라봐. 의미를 모르겠으면 "모르겠습니다" 라고 말해.`;
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       {
@@ -54,6 +54,8 @@ router.post("/", async (req, res) => {
     if (response.data) {
       if (response.data.choices) {
         const ratingString = response.data.choices[0].message.content;
+        console.log(response.data.choices[0].message.content);
+        if (ratingString.match(/\d/) === null) res.send(400);
         const rating = Number(ratingString.match(/\d/)[0]);
         const review = await Review.create({
           storeId,
@@ -66,7 +68,7 @@ router.post("/", async (req, res) => {
       }
     }
   } catch (error) {
-    console.error(error);
+    res.status(400);
   }
 
   // console.log(storeId, userName, comment, rating, date);

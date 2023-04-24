@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "rlcjfz1Q!",
+    "password": "1234",
     "database": "AutoRatingAI",
     "host": "localhost",
     "dialect": "mysql"

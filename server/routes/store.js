@@ -2,51 +2,58 @@ const express = require("express");
 const router = express.Router();
 const { Store, Review } = require("../models");
 
-// store 정보 가져오기
-router.get("/menuType", async (req, res) => {
-  const { type } = req.query;
+router.get("/", async (req, res) => {
+  const { uuid } = req.query;
   try {
-    const stores = await Store.findAll({
+    const store = await Store.findOne({
       where: {
-        type: type,
+        uuid: parseInt(uuid),
       },
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
     });
-    res.json(stores);
+
+    if (store === null) {
+      return res.status(204).send("No Content");
+    }
+
+    const reviews = await Review.findAll({
+      where: {
+        storeId: parseInt(uuid),
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+
+    store.dataValues.reviews = reviews.reverse();
+    res.json(store);
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");
   }
 });
 
-router.get("/info", async (req, res) => {
-  const { storeId } = req.query;
-
+router.post("/", async (req, res) => {
   try {
-    const reviews = await Review.findAll({
-      where: {
-        storeId: parseInt(storeId),
-      },
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
+    const { store } = req.body;
+    // Store 모델에 새로운 데이터 생성
+    const newStore = await Store.create({
+      uuid: store.uuid,
+      name: store.name,
+      imagePath: store.imagePath,
+      address: store.address,
+      type: store.type,
+      subName: store.subName,
+      x: store.x,
+      y: store.y,
+      phone: store.phone,
     });
 
-    const store = await Store.findOne({
-      where: {
-        id: parseInt(storeId),
-      },
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
-    });
-    store.dataValues.reviews = reviews.reverse();
-    res.json(store);
+    res.status(201).json(newStore);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Server Error");
   }
 });
 

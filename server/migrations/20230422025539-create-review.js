@@ -11,11 +11,11 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       storeId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
           model: "store",
-          key: "id",
+          key: "uuid",
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",

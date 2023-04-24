@@ -12,6 +12,10 @@ const Store = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
+    uuid: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -31,6 +35,18 @@ const Store = sequelize.define(
     type: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    x: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    y: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   { tableName: "store" }
@@ -60,22 +76,12 @@ const Review = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    storeId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "store",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    },
   },
   { tableName: "review" }
 );
 
-Store.hasMany(Review);
-Review.belongsTo(Store);
+Review.belongsTo(Store, { foreignKey: "storeId" });
+Store.hasMany(Review, { foreignKey: "storeId" });
 
 module.exports = {
   sequelize,
