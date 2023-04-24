@@ -33,8 +33,7 @@ export const StoreInfoContainer = styled.div`
 `;
 
 export const StoreName = styled.span`
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
   margin-right: 5px;
   @media screen and (max-width: 37.5rem) {
     font-size: 16px;
@@ -42,13 +41,23 @@ export const StoreName = styled.span`
 `;
 export const StoreSubName = styled.span`
   color: #929292;
+  font-size: 13px;
   @media screen and (max-width: 37.5rem) {
-    font-size: 13px;
+    font-size: 12px;
   }
 `;
 
-export const AddressArea = styled.div`
+export const Address = styled.div`
+  font-size: 13px;
+  color: #2e2e2e;
+`;
+
+export const Phone = styled.span`
+  font-size: 12px;
+  color: #929292;
+  margin-left: 5px;
+
   @media screen and (max-width: 37.5rem) {
-    font-size: 13px;
+    font-size: 11px;
   }
 `;

@@ -14,11 +14,11 @@ interface Props {
 }
 
 const menus: MenuCategory[] = [
-  { id: 1, title: "한식", type: "korean", path: "./koreanFood.png" },
-  { id: 2, title: "양식", type: "western", path: "./pasta.png" },
-  { id: 3, title: "일식", type: "japanese", path: "./sushi.png" },
-  { id: 4, title: "중식", type: "chinese", path: "./noodle.png" },
-  { id: 5, title: "분식", type: "snack", path: "./snack.png" },
+  { id: 1, title: "한식", type: "한식", path: "./koreanFood.png" },
+  { id: 2, title: "양식", type: "양식", path: "./pasta.png" },
+  { id: 3, title: "일식", type: "일식", path: "./sushi.png" },
+  { id: 4, title: "중식", type: "중식", path: "./noodle.png" },
+  { id: 5, title: "분식", type: "분식", path: "./snack.png" },
 ];
 
 function MenuNav({ handleMenuButtonClick }: Props) {

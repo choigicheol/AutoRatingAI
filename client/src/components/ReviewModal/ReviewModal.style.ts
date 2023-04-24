@@ -25,12 +25,13 @@ export const ReviewForm = styled.form`
   border-radius: 10px;
   padding: 10px;
   border: 4px solid #000000;
+  margin: 20px;
 `;
 
 export const ButtonArea = styled.div`
   display: flex;
   width: 100%;
-  justify-content: flex-end;
+  justify-content: space-between;
 `;
 
 export const ContentArea = styled.div`
@@ -66,10 +67,10 @@ export const Button = styled.button<ButtonProps>`
   font-size: 14px;
 `;
 
-export const WriterInfo = styled.span`
-  font-size: 18px;
+export const WriterInfo = styled(CenterContainer)`
+  font-size: 16px;
   margin-right: 5px;
-  background: rgba(255, 99, 71, 0.6);
+  background: rgba(255, 99, 71, 0.8);
   padding: 3px;
   box-sizing: border-box;
   border-radius: 3px;
@@ -86,4 +87,10 @@ export const WriterInput = styled.input`
   border-radius: 3px;
   border: 2px solid #eeeeee;
   box-sizing: border-box;
+`;
+
+export const ErrorMessage = styled(CenterContainer)`
+  width: 100%;
+  color: red;
+  font-size: 12px;
 `;

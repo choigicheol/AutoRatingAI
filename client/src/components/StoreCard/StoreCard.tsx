@@ -5,31 +5,32 @@ import {
   StoreInfoContainer,
   StoreName,
   StoreSubName,
-  AddressArea,
+  Address,
+  Phone,
 } from "./StoreCard.style";
 import { StoreData } from "../../interface/interface";
 
 interface Props {
   store: StoreData;
-  handleSelectStore: (e: React.MouseEvent<HTMLDivElement>) => void;
+  handleSelectStore: (store: StoreData) => void;
 }
 
 function StoreCard({ store, handleSelectStore }: Props) {
-  const { id, name, subName, address, imagePath } = store;
+  const { name, subName, address, imagePath, phone } = store;
   return (
     <Container>
-      <StoreImg src={`${process.env.REACT_APP_API_URL}/${imagePath}`} />
+      {/* <StoreImg src={`${process.env.REACT_APP_API_URL}/${imagePath}`} /> */}
       <StoreInfoContainer
-        id={id}
-        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-          handleSelectStore(e);
+        onClick={() => {
+          handleSelectStore(store);
         }}
       >
         <div style={{ marginBottom: "10px" }}>
           <StoreName>{name}</StoreName>
           <StoreSubName>{`${subName}`}</StoreSubName>
+          {!!phone && <Phone>{`( ${phone} )`}</Phone>}
         </div>
-        <AddressArea>{`주소 : ${address}`}</AddressArea>
+        <Address>{`주소 : ${address}`}</Address>
       </StoreInfoContainer>
     </Container>
   );

@@ -8,9 +8,11 @@ import {
   Button,
   WriterInput,
   WriterInfo,
+  ErrorMessage,
 } from "./ReviewModal.style";
 
 interface Props {
+  isError: boolean;
   handleCloseModal: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleSendReview: (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -19,7 +21,7 @@ interface Props {
   ) => void;
 }
 
-function ReviewModal({ handleCloseModal, handleSendReview }: Props) {
+function ReviewModal({ isError, handleCloseModal, handleSendReview }: Props) {
   const [textValue, setTextValue] = useState<string>("");
   const [writer, setWriter] = useState<string>("");
 
@@ -53,21 +55,26 @@ function ReviewModal({ handleCloseModal, handleSendReview }: Props) {
           <Textarea rows="8" cols="50" />
         </ContentArea>
         <ButtonArea>
-          <Button
-            background={"tomato"}
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-              handleCloseModal(e)
-            }
-          >
-            {"취소"}
-          </Button>
-          <Button
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-              handleSendReview(e, textValue, writer)
-            }
-          >
-            {"등록"}
-          </Button>
+          <ErrorMessage>
+            {isError ? "좀 더 자세히 적어주세요" : ""}
+          </ErrorMessage>
+          <div style={{ display: "flex" }}>
+            <Button
+              background={"tomato"}
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                handleCloseModal(e)
+              }
+            >
+              {"취소"}
+            </Button>
+            <Button
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                handleSendReview(e, textValue, writer)
+              }
+            >
+              {"등록"}
+            </Button>
+          </div>
         </ButtonArea>
       </ReviewForm>
     </Container>

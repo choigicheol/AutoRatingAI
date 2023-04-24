@@ -22,10 +22,9 @@ export const MenuImage = styled.img<Props>`
 `;
 
 export const MenuTitle = styled.span<Props>`
-  margin-top: 10px;
-  font-weight: bold;
-  font-size: 12px;
+  margin-top: 6px;
+  font-size: 10px;
   border-radius: 2px;
-  padding-bottom: 5px;
+  padding-bottom: 1px;
   border-bottom: 2px solid tomato;
 `;

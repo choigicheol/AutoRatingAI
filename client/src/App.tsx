@@ -1,12 +1,16 @@
-import MainPage from "./pages/MainPage/MainPage";
 import "./App.css";
-import ReviewPage from "./pages/ReviewPage/ReviewPage";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import MainPage from "./pages/MainPage/MainPage";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
     <div className="App">
-      <MainPage></MainPage>
-      {/* <ReviewPage /> */}
+      <Header />
+      <MainPage />
+      <Footer />
     </div>
   );
 }

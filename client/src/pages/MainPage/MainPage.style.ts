@@ -16,7 +16,8 @@ const fadeIn = keyframes`
 export const Container = styled.div`
   display: flex;
   justify-content: center;
-  height: 88vh;
+  height: 93vh;
+  margin-bottom: 20px;
   @media screen and (max-width: 37.5rem) {
   }
 `;

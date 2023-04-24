@@ -6,7 +6,7 @@ import { StoreData } from "../../interface/interface";
 
 interface Props {
   stores: StoreData[] | undefined;
-  handleSelectStore: (e: React.MouseEvent<HTMLDivElement>) => void;
+  handleSelectStore: (store: StoreData) => void;
 }
 
 function StoreList({ stores, handleSelectStore }: Props) {
@@ -16,7 +16,7 @@ function StoreList({ stores, handleSelectStore }: Props) {
         stores.map((store) => {
           return (
             <StoreCard
-              key={store.id}
+              key={store.uuid}
               store={store}
               handleSelectStore={handleSelectStore}
             />

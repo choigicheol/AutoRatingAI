@@ -1,19 +1,37 @@
-import React, { useEffect, useState } from "react";
-import Header from "../../components/Header/Header";
+import React, { useEffect, useState, useRef } from "react";
+// import Header from "../../components/Header/Header";
 import {
   Container,
   StoreListContainer,
   ReviewListContainer,
   BackButton,
 } from "./MainPage.style";
-import Footer from "../../components/Footer/Footer";
+// import Footer from "../../components/Footer/Footer";
 import ReviewModal from "../../components/ReviewModal/ReviewModal";
 import axios from "axios";
 import MenuNav from "../../components/MenuNav/MenuNav";
 import StoreList from "../../components/StoreList/StoreList";
 import ReviewList from "../../components/ReviewList/ReviewList";
 import { ReviewData, StoreData } from "../../interface/interface";
-import { BlankMessage } from "../../styles/commonStyles";
+import { BlankMessage, CenterContainer } from "../../styles/commonStyles";
+import KakaoMap from "../../components/KakaoMap/KakaoMap";
+import { convertMapDataToStoreData } from "../../util/util";
+import Loading from "../../components/Loading/Loading";
+
+interface MapData {
+  address_name: string;
+  category_group_code: string;
+  category_group_name: string;
+  category_name: string;
+  distance: string;
+  id: string;
+  phone: string;
+  place_name: string;
+  place_url: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+}
 
 function MainPage() {
   const [isSelectStore, setIsSelectStore] = useState(false);
@@ -21,50 +39,62 @@ function MainPage() {
     undefined
   );
   const [showModal, setShowModal] = useState(false);
-  const [stores, setStores] = useState<StoreData[] | undefined>(undefined);
   const [isShowReview, setIsShowReview] = useState<boolean>(false);
+  const [stores, setStores] = useState<StoreData[]>([]);
+  const [selectType, setSelectType] = useState("음식점");
+  const [isMapResult, setIsMapResult] = useState<boolean>(true);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/store/menuType?type=korean`)
-      .then((response) => {
-        setStores(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  const getPlace = (data: MapData[]) => {
+    const storesArr: StoreData[] = [];
+
+    data.forEach((el) => {
+      const storeData = convertMapDataToStoreData(el);
+      storesArr.push(storeData);
+    });
+    // console.log(storesArr);
+    setStores(storesArr);
+  };
+
+  useEffect(() => {}, []);
 
   const handleMenuButtonClick = (type: string) => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/store/menuType?type=${type}`)
-      .then((response) => {
-        setStores(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    setSelectType(type);
   };
 
   const handleOpenReview = () => {
     setShowModal(true);
   };
 
-  const getStore = (id: string) => {
+  const getStore = (store: StoreData) => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/store/info?storeId=${id}`, {})
+      .get(`${process.env.REACT_APP_API_URL}/store?uuid=${store.uuid}`, {})
       .then((response) => {
-        setSelectStore(response.data);
-        setIsSelectStore(true);
+        if (response.status === 204) createStore(store);
+        else {
+          setSelectStore(response.data);
+          setIsSelectStore(true);
+        }
       })
+      .then(() => setIsShowReview(true))
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const handleSelectStore = (e: React.MouseEvent<HTMLDivElement>) => {
-    getStore(e.currentTarget.id);
-    setIsShowReview(true);
+  const createStore = (store: StoreData) => {
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/store`, { store })
+      .then((response) => {
+        if (response.status === 201) {
+          getStore(store);
+        }
+      });
+  };
+
+  const handleSelectStore = (store: StoreData) => {
+    getStore(store);
   };
 
   const handleCloseModal = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -86,8 +116,9 @@ function MainPage() {
     writer: string
   ) => {
     e.preventDefault();
-
-    const storeId = selectStore?.id;
+    setIsLoading(true);
+    setIsError(false);
+    const storeId = selectStore?.uuid;
     const userName = writer;
     const comment = text;
 
@@ -100,21 +131,38 @@ function MainPage() {
       .then((response) => {
         updateReview(response.data);
         setShowModal(false);
+        setIsLoading(false);
       })
       .catch((error) => {
-        console.log("여기");
-        console.error(error);
+        setIsError(true);
+        setIsLoading(false);
       });
   };
 
+  const scrollToTop = () => {};
+
+  const getIsMapResult = (result: boolean) => {
+    setIsMapResult(result);
+  };
   return (
     <>
-      <Header />
       <Container>
         {/* ---------------------------- store List ---------------------------- */}
         <StoreListContainer isShowReview={isShowReview}>
           <MenuNav handleMenuButtonClick={handleMenuButtonClick} />
-          <StoreList stores={stores} handleSelectStore={handleSelectStore} />
+          <KakaoMap
+            selectType={selectType}
+            getPlace={getPlace}
+            getIsMapResult={getIsMapResult}
+            handleSelectStore={handleSelectStore}
+          />
+          {isMapResult ? (
+            <StoreList stores={stores} handleSelectStore={handleSelectStore} />
+          ) : (
+            <CenterContainer style={{ height: "100%" }}>
+              {"검색결과가 없습니다."}
+            </CenterContainer>
+          )}
         </StoreListContainer>
         {/* ---------------------------- review List ---------------------------- */}
         <ReviewListContainer isShowReview={isShowReview}>
@@ -139,9 +187,10 @@ function MainPage() {
           )}
         </ReviewListContainer>
       </Container>
-      <Footer />
+      {isLoading && <Loading />}
       {showModal && (
         <ReviewModal
+          isError={isError}
           handleCloseModal={handleCloseModal}
           handleSendReview={handleSendReview}
         />
