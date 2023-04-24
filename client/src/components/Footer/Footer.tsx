@@ -2,7 +2,7 @@ import React from "react";
 import { FooterContainer } from "./Footer.style";
 
 function Footer() {
-  return <FooterContainer></FooterContainer>;
+  return <FooterContainer>{"gigichoi"}</FooterContainer>;
 }
 
 export default Footer;
