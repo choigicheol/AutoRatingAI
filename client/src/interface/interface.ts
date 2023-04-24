@@ -9,11 +9,14 @@ export interface ReviewData {
 }
 
 export interface StoreData {
-  id: string;
+  uuid: string;
   name: string;
-  imagePath: string;
+  imagePath?: string;
   address: string;
   type: string;
   subName: string;
+  x: string;
+  y: string;
+  phone: string;
   reviews: ReviewData[];
 }
