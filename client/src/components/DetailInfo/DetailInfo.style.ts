@@ -7,7 +7,11 @@ export const Container = styled(ColumnContainer)`
   z-index: 1;
 `;
 
-export const Title = styled(CenterContainer)``;
+export const Title = styled(CenterContainer)`
+  @media screen and (max-width: 37.5rem) {
+    flex-direction: column;
+  }
+`;
 
 export const OpenModalButton = styled(CenterContainer)`
   width: 100px;
@@ -27,12 +31,18 @@ export const StoreName = styled.span`
   margin: 10px 0;
   font-size: 25px;
   color: tomato;
+  @media screen and (max-width: 37.5rem) {
+    font-size: 20px;
+  }
 `;
 
 export const SubName = styled.span`
   font-size: 16px;
   color: #929292;
   margin-left: 10px;
+  @media screen and (max-width: 37.5rem) {
+    font-size: 12px;
+  }
 `;
 
 export const Address = styled(CenterContainer)`
@@ -41,5 +51,12 @@ export const Address = styled(CenterContainer)`
   img {
     width: 13px;
     margin-right: 5px;
+  }
+  @media screen and (max-width: 37.5rem) {
+    font-size: 10px;
+    img {
+      width: 10px;
+      margin-right: 5px;
+    }
   }
 `;

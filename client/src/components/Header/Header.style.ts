@@ -5,6 +5,7 @@ export const HeaderContainer = styled.header`
   justify-content: center;
   align-items: center;
   height: 40px;
+  width: 100%;
   > span {
     font-size: 20px;
   }
