@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
 import { CenterContainer } from "../../styles/commonStyles";
 import styled from "styled-components";
-import "./KakaoMap.css";
 import { convertMapDataToStoreData } from "../../util/util";
 
 function KakaoMap({ selectType, getPlace, getIsMapResult, handleSelectStore }) {
@@ -11,67 +10,87 @@ function KakaoMap({ selectType, getPlace, getIsMapResult, handleSelectStore }) {
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
   const [searchInputValue, setSearchInputValue] = useState("");
-  const [keyword, setKeyword] = useState("");
   const [position, setPosition] = useState({
     lat: 37.27958020017223,
     lng: 127.11463078567597,
   });
 
-  useEffect(() => {
-    var geocoder = new kakao.maps.services.Geocoder();
-    geocoder.coord2Address(position.lng, position.lat, displayCenterInfo);
-    // geocoder.coord2RegionCode(position.lng, position.lat, displayCenterInfo);
-  }, [position]);
+  const ps = new kakao.maps.services.Places();
 
-  function displayCenterInfo(result, status) {
-    if (status === kakao.maps.services.Status.OK) {
-      let detailAddr = !!result[0].road_address
-        ? result[0].road_address.address_name
-        : "";
-      detailAddr += result[0].address.address_name;
-      setKeyword(detailAddr);
-    }
-  }
+  let isUseBounds = true;
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") setKeyword(searchInputValue);
+    if (e.key === "Enter") keywordSearch();
+  };
+
+  const categorySearch = () => {
+    if (!map) return;
+    isUseBounds = false;
+    const options = {
+      location: new kakao.maps.LatLng(position.lat, position.lng),
+      sort: kakao.maps.services.SortBy.DISTANCE,
+    };
+    ps.categorySearch("FD6", kakaoMapCallback, options);
+  };
+
+  const keywordSearch = (selectType) => {
+    if (!map) return;
+    const options = {
+      category_group_code: "FD6",
+      location: new kakao.maps.LatLng(
+        map.getCenter().getLat(),
+        map.getCenter().getLng()
+      ),
+    };
+
+    if (selectType) {
+      isUseBounds = false;
+      ps.keywordSearch(selectType, kakaoMapCallback, options);
+    } else {
+      isUseBounds = true;
+      ps.keywordSearch(searchInputValue, kakaoMapCallback, options);
+    }
+  };
+
+  const kakaoMapCallback = (data, status, _pagination) => {
+    if (status === kakao.maps.services.Status.OK) {
+      getIsMapResult(true);
+      const bounds = new kakao.maps.LatLngBounds();
+      let markers = [];
+      getPlace(data);
+      for (var i = 0; i < data.length; i++) {
+        markers.push({
+          position: {
+            lat: data[i].y,
+            lng: data[i].x,
+          },
+          content: data[i].place_name,
+          data: data[i],
+        });
+        bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+      }
+      setMarkers(markers);
+      if (isUseBounds) map.setBounds(bounds);
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      getIsMapResult(false);
+      setMarkers([]);
+    } else if (status === kakao.maps.services.Status.ERROR) {
+      // 에러로 인해 검색결과가 나오지 않은 경우 해야할 처리가 있다면 이곳에 작성해 주세요
+    }
+  };
+
+  const handleClickMarker = (e, marker) => {
+    setInfo(marker);
+    map.panTo(e.getPosition());
   };
 
   useEffect(() => {
-    if (!map) return;
-    const ps = new kakao.maps.services.Places();
+    categorySearch();
+  }, [map, position]);
 
-    ps.keywordSearch(
-      `${keyword} ${selectType}`,
-      (data, status, _pagination) => {
-        if (status === kakao.maps.services.Status.OK) {
-          getIsMapResult(true);
-          const bounds = new kakao.maps.LatLngBounds();
-          let markers = [];
-          getPlace(data);
-          for (var i = 0; i < data.length; i++) {
-            markers.push({
-              position: {
-                lat: data[i].y,
-                lng: data[i].x,
-              },
-              content: data[i].place_name,
-              data: data[i],
-            });
-            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-          }
-          setMarkers(markers);
-
-          map.setBounds(bounds);
-        } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          getIsMapResult(false);
-          setMarkers([]);
-        } else if (status === kakao.maps.services.Status.ERROR) {
-          // 에러로 인해 검색결과가 나오지 않은 경우 해야할 처리가 있다면 이곳에 작성해 주세요
-        }
-      }
-    );
-  }, [map, keyword, selectType]);
+  useEffect(() => {
+    keywordSearch(selectType);
+  }, [selectType]);
 
   return (
     <Container>
@@ -80,16 +99,14 @@ function KakaoMap({ selectType, getPlace, getIsMapResult, handleSelectStore }) {
           onChange={(e) => setSearchInputValue(e.target.value)}
           onKeyPress={(e) => handleKeyPress(e)}
           value={searchInputValue}
-          placeholder={"주소를 입력해주세요 ex)강남역 or 서울특별시 역삼동"}
-        ></SearchInput>
-        <SearchButton onClick={() => setKeyword(searchInputValue)}>
-          검색
-        </SearchButton>
+          placeholder={"위치를 검색해보세요"}
+        />
+        <SearchButton onClick={() => keywordSearch(null)}>검색</SearchButton>
       </CenterContainer>
-      <Map // 로드뷰를 표시할 Container
+      <Map
         center={{
-          lat: 37.566826,
-          lng: 126.9786567,
+          lat: 37.28140250189864,
+          lng: 127.11233321137159,
         }}
         style={{
           width: "100%",
@@ -104,18 +121,13 @@ function KakaoMap({ selectType, getPlace, getIsMapResult, handleSelectStore }) {
             lng: map.getCenter().getLng(),
           });
         }}
-        level={3}
+        level={4}
       >
         {markers.map((marker, idx) => (
           <div key={idx}>
             <MapMarker // 마커를 생성합니다
               position={{ lat: marker.position.lat, lng: marker.position.lng }}
-              onClick={(e) => {
-                setInfo(marker);
-                setTimeout(() => {
-                  map.panTo(e.getPosition());
-                }, 0);
-              }}
+              onClick={(e) => handleClickMarker(e, marker)}
               image={{
                 src: "./marker.png",
                 size: {
@@ -130,16 +142,31 @@ function KakaoMap({ selectType, getPlace, getIsMapResult, handleSelectStore }) {
                   lat: marker.position.lat,
                   lng: marker.position.lng,
                 }}
-                yAnchor={2.1}
+                yAnchor={3.6}
               >
-                <div
-                  onClick={() => {
-                    console.log(marker);
-                    handleSelectStore(convertMapDataToStoreData(marker.data));
-                  }}
-                  className="customoverlay"
-                >
-                  <span className="title">{marker.content}</span>
+                <div>
+                  <span
+                    style={{
+                      background: "#000000",
+                      color: "#ffffff",
+                      padding: "10px",
+                      cursor: "auto",
+                    }}
+                  >
+                    {marker.content}
+                  </span>
+                  <span
+                    onClick={() => {
+                      handleSelectStore(convertMapDataToStoreData(marker.data));
+                    }}
+                    style={{
+                      background: "#000000",
+                      color: "#ffffff",
+                      padding: "10px",
+                    }}
+                  >
+                    {">"}
+                  </span>
                 </div>
               </CustomOverlayMap>
             )}
@@ -154,8 +181,8 @@ export default KakaoMap;
 
 const Container = styled(CenterContainer)`
   /* height: 300px; */
-  width: 360px;
-  padding: 10px 20px;
+  /* width: 360px; */
+  width: 100%;
   flex-direction: column;
   border-radius: 30px;
   /* overflow: hidden; */
@@ -163,15 +190,16 @@ const Container = styled(CenterContainer)`
 
 const SearchInput = styled.input`
   width: 100%;
-  height: 25px;
+  height: 30px;
   padding-left: 5px;
   font-family: BMJUA;
   box-sizing: border-box;
+  font-size: 13px;
 `;
 
 const SearchButton = styled.button`
-  width: 50px;
-  height: 25px;
+  width: 60px;
+  height: 30px;
   margin-left: 10px;
   border-radius: 4px;
   font-family: BMJUA;
