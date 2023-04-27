@@ -8,8 +8,9 @@ export const Container = styled.section`
   padding: 15px;
   border-radius: 3px;
   background: #ffffff;
-  margin: 10px 0 10px 0;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.35);
+  margin: 10px 0;
+  border: 1px solid #e9e9e9;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
 `;
 
