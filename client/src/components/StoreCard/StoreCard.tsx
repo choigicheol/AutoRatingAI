@@ -1,14 +1,15 @@
 import React from "react";
 import {
   Container,
-  StoreImg,
   StoreInfoContainer,
   StoreName,
   StoreSubName,
   Address,
   Phone,
+  NavigateReviewButton,
 } from "./StoreCard.style";
 import { StoreData } from "../../interface/interface";
+import { CenterContainer } from "../../styles/commonStyles";
 
 interface Props {
   store: StoreData;
@@ -20,18 +21,21 @@ function StoreCard({ store, handleSelectStore }: Props) {
   return (
     <Container>
       {/* <StoreImg src={`${process.env.REACT_APP_API_URL}/${imagePath}`} /> */}
-      <StoreInfoContainer
+      <StoreInfoContainer>
+        <div>
+          <StoreName>{name}</StoreName>
+          <StoreSubName>{`${subName}`}</StoreSubName>
+        </div>
+        {<Phone>{`Tel. : ${phone}`}</Phone>}
+        <Address>{`주소 : ${address}`}</Address>
+      </StoreInfoContainer>
+      <NavigateReviewButton
         onClick={() => {
           handleSelectStore(store);
         }}
       >
-        <div style={{ marginBottom: "10px" }}>
-          <StoreName>{name}</StoreName>
-          <StoreSubName>{`${subName}`}</StoreSubName>
-          {!!phone && <Phone>{`( ${phone} )`}</Phone>}
-        </div>
-        <Address>{`주소 : ${address}`}</Address>
-      </StoreInfoContainer>
+        {">"}
+      </NavigateReviewButton>
     </Container>
   );
 }

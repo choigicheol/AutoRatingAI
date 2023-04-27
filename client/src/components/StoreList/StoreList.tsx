@@ -1,5 +1,3 @@
-import React from "react";
-import { ContentsContainer } from "./StoreList.style";
 import StoreCard from "../StoreCard/StoreCard";
 import { ListContainer } from "../../styles/commonStyles";
 import { StoreData } from "../../interface/interface";

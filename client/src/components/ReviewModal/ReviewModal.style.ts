@@ -20,11 +20,10 @@ export const ReviewForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 400px;
   background: #ffffff;
   border-radius: 10px;
   padding: 10px;
-  border: 4px solid #000000;
+  border: 3px solid #000000;
   margin: 20px;
 `;
 
@@ -55,8 +54,8 @@ export const Textarea = styled.textarea`
 `;
 
 export const Button = styled.button<ButtonProps>`
-  width: 50px;
-  height: 28px;
+  width: 60px;
+  height: 30px;
   cursor: pointer;
   margin-left: 8px;
   border-radius: 4px;
@@ -65,6 +64,7 @@ export const Button = styled.button<ButtonProps>`
   background: ${(props) => props.background || "#000000"};
   color: #ffffff;
   font-size: 14px;
+  box-sizing: border-box;
 `;
 
 export const WriterInfo = styled(CenterContainer)`
@@ -72,10 +72,10 @@ export const WriterInfo = styled(CenterContainer)`
   margin-right: 5px;
   background: rgba(255, 99, 71, 0.8);
   padding: 3px;
-  box-sizing: border-box;
   border-radius: 3px;
   height: 30px;
   color: #ffffff;
+  box-sizing: border-box;
 `;
 
 export const WriterInput = styled.input`

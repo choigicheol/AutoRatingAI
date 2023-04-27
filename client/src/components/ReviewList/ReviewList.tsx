@@ -10,7 +10,7 @@ import { StoreData } from "../../interface/interface";
 import { FullCenterContainer } from "./ReviewList.style";
 
 interface Props {
-  selectStore: StoreData | undefined;
+  selectStore: StoreData | null;
   handleOpenReview: () => void;
 }
 
